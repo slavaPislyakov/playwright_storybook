@@ -1,3 +1,27 @@
+# Dependencies
 /node_modules
 
+# Testing
+/coverage
+/test-results
+/playwright-report
+/playwright/.cache
+
+# Production builds
+/dist
+/storybook-static
+
+# Development
+.vite
+*.tsbuildinfo
+storybook-static
+
+# Environment variables
+.env*
+
+# OS
 .DS_Store
+
+# IDE
+.vscode/*
+!.vscode/extensions.json

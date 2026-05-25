@@ -1,4 +1,4 @@
-import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import type { Preview } from '@storybook/react';
 
 const customViewports = {
@@ -46,8 +46,7 @@ const preview: Preview = {
       },
     },
     viewport: {
-      // defaultViewport: 'reset',
-      viewports: {
+      options: {
         ...INITIAL_VIEWPORTS,
         ...customViewports,
       },
