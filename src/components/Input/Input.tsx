@@ -20,15 +20,15 @@ export function Input({
   const showError = required && touched && value.trim().length === 0;
 
   return (
-    <div className="input-field">
-      <label className="input-field__label" htmlFor="storybook-input">
+    <div className='input-field'>
+      <label className='input-field__label' htmlFor='storybook-input'>
         {label}
       </label>
 
       <input
-        id="storybook-input"
+        id='storybook-input'
         className={`input-field__control ${showError ? 'input-field__control--error' : ''}`}
-        type="text"
+        type='text'
         placeholder={placeholder}
         value={value}
         maxLength={maxLength}
@@ -37,15 +37,15 @@ export function Input({
         onBlur={() => setTouched(true)}
       />
 
-      <div className="input-field__meta">
+      <div className='input-field__meta'>
         <span
           className={`input-field__error ${showError ? 'input-field__error--visible' : ''}`}
-          data-testid="input-error"
+          data-testid='input-error'
         >
           Поле обязательно
         </span>
 
-        <span data-testid="input-counter">
+        <span data-testid='input-counter'>
           {value.length}/{maxLength}
         </span>
       </div>

@@ -11,7 +11,7 @@ export function Modal({
   title,
   description,
   mode = 'desktop',
-    showDraftButton = true,
+  showDraftButton = true,
      
 }: ModalProps) {
   const isMobile = mode === 'mobile';
@@ -27,7 +27,7 @@ export function Modal({
         .filter(Boolean)
         .join(' ')}
     >
-      <div className="modal-backdrop" />
+      <div className='modal-backdrop' />
 
       <div
         className={[
@@ -37,22 +37,22 @@ export function Modal({
         ]
           .filter(Boolean)
           .join(' ')}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
+        role='dialog'
+        aria-modal='true'
+        aria-labelledby='modal-title'
+        aria-describedby='modal-description'
       >
-        <div className="modal__header">
-          <h2 id="modal-title" className="modal__title">
+        <div className='modal__header'>
+          <h2 id='modal-title' className='modal__title'>
             {title}
           </h2>
 
-          <button type="button" className="modal__close" aria-label="Закрыть">
+          <button type='button' className='modal__close' aria-label='Закрыть'>
             ×
           </button>
         </div>
 
-        <p id="modal-description" className="modal__description">
+        <p id='modal-description' className='modal__description'>
           {description}
         </p>
 
@@ -63,10 +63,10 @@ export function Modal({
           ]
             .filter(Boolean)
             .join(' ')}
-          data-testid="modal-actions"
+          data-testid='modal-actions'
         >
           <button
-            type="button"
+            type='button'
             className={`modal__button ${isMobile ? 'modal__button--mobile' : ''} modal__button--ghost`}
           >
             Отмена
@@ -74,7 +74,7 @@ export function Modal({
 
           {showDraftButton && (
             <button
-              type="button"
+              type='button'
               className={`modal__button ${isMobile ? 'modal__button--mobile' : ''} modal__button--secondary`}
             >
               Сохранить как черновик
@@ -82,7 +82,7 @@ export function Modal({
           )}
 
           <button
-            type="button"
+            type='button'
             className={`modal__button ${isMobile ? 'modal__button--mobile' : ''} modal__button--primary`}
           >
             Опубликовать

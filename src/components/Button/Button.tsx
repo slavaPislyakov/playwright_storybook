@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './button.css';
 
 export type ButtonProps = {
@@ -24,12 +24,10 @@ export function Button({
   successDelayMs = 1000,
   onClick,
 }: ButtonProps) {
-  const [isLoading, setIsLoading] = useState(loading);
+  const [localLoading, setLocalLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(loading);
-  }, [loading]);
+  const isLoading = loading || localLoading;
 
   const handleClick = () => {
     if (disabled || isLoading) return;
@@ -37,11 +35,11 @@ export function Button({
     onClick?.();
 
     if (asyncSuccess) {
-      setIsLoading(true);
+      setLocalLoading(true);
       setIsSent(false);
 
       window.setTimeout(() => {
-        setIsLoading(false);
+        setLocalLoading(false);
         setIsSent(true);
       }, successDelayMs);
     }
@@ -52,7 +50,7 @@ export function Button({
 
   return (
     <button
-      type="button"
+      type='button'
       className={[
         'button',
         `button--${variant}`,
@@ -67,7 +65,7 @@ export function Button({
       onClick={handleClick}
     >
       {variant === 'icon' ? (
-        <span aria-hidden="true" className="button__icon">
+        <span aria-hidden='true' className='button__icon'>
           {icon ?? '✉'}
         </span>
       ) : (

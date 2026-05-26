@@ -15,19 +15,21 @@
     "test-storybook:firefox": "  --browsers firefox --includeTags=play-fn",
     "test-storybook:webkit": "test-storybook --browsers webkit --includeTags=play-fn",
     "test-storybook:all-browsers": "test-storybook --browsers chromium firefox webkit --includeTags=play-fn",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\""
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@storybook/addon-a11y": "^10.4.1",
     "@storybook/addon-docs": "^10.4.1",
     "@storybook/react-vite": "^10.4.1",
     "@storybook/test": "^8.6.15",
     "@storybook/test-runner": "^0.24.4",
+    "@stylistic/eslint-plugin": "^5.10.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@typescript-eslint/eslint-plugin": "^8.60.0",
@@ -44,6 +46,7 @@
     "prettier": "^3.8.3",
     "storybook": "^10.4.1",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.60.0",
     "vite": "^6.4.2"
   },
   "keywords": [],
