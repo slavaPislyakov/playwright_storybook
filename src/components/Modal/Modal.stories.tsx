@@ -1,5 +1,5 @@
 import type { Decorator, Meta, StoryObj } from '@storybook/react';
-import { expect, within } from 'storybook/test';
+import { expect, within } from '@storybook/test';
 import { Modal } from './Modal';
 
 const withFrame = (width: number): Decorator => {
@@ -28,7 +28,9 @@ const assertDesktopLayout = async (canvasElement: HTMLElement) => {
   const publishButton = canvas.getByRole('button', { name: 'Опубликовать' });
 
   await expect(dialog).toBeInTheDocument();
-  await expect(canvas.getByRole('button', { name: 'Отмена' })).toBeInTheDocument();
+  await expect(
+    canvas.getByRole('button', { name: 'Отмена' }),
+  ).toBeInTheDocument();
   await expect(draftButton).toBeInTheDocument();
   await expect(publishButton).toBeInTheDocument();
 
@@ -43,9 +45,15 @@ const assertTabletLayout = async (canvasElement: HTMLElement) => {
   const actions = canvas.getByTestId('modal-actions');
 
   await expect(dialog).toBeInTheDocument();
-  await expect(canvas.getByRole('button', { name: 'Отмена' })).toBeInTheDocument();
-  await expect(canvas.queryByRole('button', { name: 'Сохранить как черновик' })).toBeNull();
-  await expect(canvas.getByRole('button', { name: 'Опубликовать' })).toBeInTheDocument();
+  await expect(
+    canvas.getByRole('button', { name: 'Отмена' }),
+  ).toBeInTheDocument();
+  await expect(
+    canvas.queryByRole('button', { name: 'Сохранить как черновик' }),
+  ).toBeNull();
+  await expect(
+    canvas.getByRole('button', { name: 'Опубликовать' }),
+  ).toBeInTheDocument();
 
   const actionsStyle = window.getComputedStyle(actions);
   await expect(actionsStyle.flexDirection).toBe('row');
@@ -62,7 +70,7 @@ const assertMobileLayout = async (canvasElement: HTMLElement) => {
   await expect(dialog).toBeInTheDocument();
   await expect(cancelButton).toBeInTheDocument();
   await expect(
-    canvas.getByRole('button', { name: 'Сохранить как черновик' })
+    canvas.getByRole('button', { name: 'Сохранить как черновик' }),
   ).toBeInTheDocument();
   await expect(publishButton).toBeInTheDocument();
 

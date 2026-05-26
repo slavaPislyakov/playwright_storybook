@@ -11,7 +11,8 @@ export function Modal({
   title,
   description,
   mode = 'desktop',
-  showDraftButton = true,
+    showDraftButton = true,
+     
 }: ModalProps) {
   const isMobile = mode === 'mobile';
   const isTablet = mode === 'tablet';
