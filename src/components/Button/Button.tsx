@@ -26,6 +26,8 @@ export function Button({
 }: ButtonProps) {
   const [localLoading, setLocalLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [isPressed, setIsPressed] = useState(false);
 
   const isLoading = loading || localLoading;
 
@@ -45,8 +47,22 @@ export function Button({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setIsPressed(true);
+    }
+  };
+
   const isDisabled = disabled || isLoading;
-  const text = isLoading ? 'Загрузка...' : isSent ? 'Отправлено' : label;
+  const text = isLoading
+    ? 'Загрузка...'
+    : isSent
+      ? 'Отправлено'
+      : isPressed
+        ? 'Нажат enter'
+        : isFocused
+          ? 'Кнопка в фокусе'
+          : label;
 
   return (
     <button
@@ -63,6 +79,12 @@ export function Button({
       aria-busy={isLoading ? 'true' : 'false'}
       aria-label={variant === 'icon' ? label : undefined}
       onClick={handleClick}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => {
+        setIsFocused(false);
+        setIsPressed(false);
+      }}
+      onKeyDown={handleKeyDown}
     >
       {variant === 'icon' ? (
         <span aria-hidden='true' className='button__icon'>

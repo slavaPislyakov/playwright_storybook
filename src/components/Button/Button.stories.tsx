@@ -90,12 +90,18 @@ export const KeyboardAccess: Story = {
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
-    const button = canvas.getByRole('button', { name: 'Продолжить' });
+    const button = canvas.getByRole('button');
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     await userEvent.tab();
     await expect(button).toHaveFocus();
+    await expect(button).toHaveTextContent('Кнопка в фокусе');
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     await userEvent.keyboard('{Enter}');
+    await expect(button).toHaveTextContent('Нажат enter');
 
     await expect(args.onClick).toHaveBeenCalledTimes(1);
   },
