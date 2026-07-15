@@ -1,0 +1,104 @@
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  max-width: 400px;
+}
+
+.card--default {
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card--outlined {
+  border: 2px solid #e2e8f0;
+  box-shadow: none;
+}
+
+.card--elevated {
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.card--padding-small .card__content,
+.card--padding-small .card__footer {
+  padding: 12px;
+}
+
+.card--padding-medium .card__content,
+.card--padding-medium .card__footer {
+  padding: 20px;
+}
+
+.card--padding-large .card__content,
+.card--padding-large .card__footer {
+  padding: 28px;
+}
+
+.card--clickable {
+  cursor: pointer;
+}
+
+.card--clickable:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.card--clickable:focus-visible {
+  outline: none;
+}
+
+.card--clickable:active {
+  transform: translateY(0);
+}
+
+.card__image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.card--clickable:hover .card__image {
+  transform: scale(1.05);
+}
+
+.card__content {
+  flex: 1;
+}
+
+.card__title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #0f172a;
+  line-height: 1.4;
+}
+
+.card__description {
+  margin: 0;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.card__footer {
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
