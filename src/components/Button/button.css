@@ -23,8 +23,7 @@
 }
 
 .button:focus-visible {
-  outline: 2px solid #1d4ed8;
-  outline-offset: 2px;
+  outline: none;
 }
 
 .button--primary {
@@ -71,4 +70,36 @@
 
 .button--loading {
   position: relative;
+}
+
+/* Outlined variant - обводка, прозрачный фон */
+.button--outlined {
+  background: transparent;
+  color: #2563eb;
+  border: 2px solid #2563eb;
+}
+
+.button--outlined:hover:not(:disabled) {
+  background: #eff6ff;
+}
+
+/* Elevated variant - с тенью, белый фон */
+.button--elevated {
+  background: #ffffff;
+  color: #0f172a;
+  border: none;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.button--elevated:hover:not(:disabled) {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+              0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.button--elevated:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+              0 2px 4px -2px rgba(0, 0, 0, 0.1);
 }
