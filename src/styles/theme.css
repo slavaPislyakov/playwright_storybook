@@ -1,0 +1,102 @@
+/*
+ * Дизайн-токены (CSS-переменные) для тем оформления.
+ *
+ * Light — по умолчанию на :root.
+ * Dark — переопределяется через [data-theme="dark"] (вешается глобальным
+ * декоратором preview.tsx на document.documentElement — корень iframe canvas).
+ *
+ * Переменные каскадируются, поэтому достаточно определить их на :root,
+ * а [data-theme="dark"] переопределит их для всего canvas.
+ *
+ * `body` получает фон/цвет темы, чтобы тёмная тема закрашивала весь canvas,
+ * а не только сам компонент — без ручной обёртки с minHeight: 100vh.
+ */
+
+:root {
+  /* Поверхности */
+  --color-bg: #ffffff;
+  --color-bg-muted: #f1f5f9;
+  --color-bg-subtle: #e2e8f0;
+
+  /* Границы */
+  --color-border: #cbd5e1;
+  --color-border-strong: #94a3b8;
+
+  /* Текст */
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+
+  /* Primary (синий) */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-bg: #eff6ff;
+  --color-primary-bg-strong: #dbeafe;
+  --color-on-primary: #ffffff;
+
+  /* Семантические (error/success/warning/info) */
+  --color-error: #dc2626;
+  --color-error-bg: #fef2f2;
+  --color-success: #22c55e;
+  --color-success-bg: #f0fdf4;
+  --color-warning: #f59e0b;
+  --color-warning-bg: #fffbeb;
+  --color-info: #3b82f6;
+  --color-info-bg: #eff6ff;
+
+  /* Оверлей модалки */
+  --color-overlay: rgba(15, 23, 42, 0.5);
+
+  /* Тень для elevated-элементов (одинаковая для обеих тем) */
+  --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-elevated-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+[data-theme='dark'] {
+  /* Поверхности — тёмные */
+  --color-bg: #1e293b;
+  --color-bg-muted: #0f172a;
+  --color-bg-subtle: #334155;
+
+  /* Границы — светлее на тёмном фоне */
+  --color-border: #475569;
+  --color-border-strong: #64748b;
+
+  /* Текст — светлый */
+  --color-text: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+
+  /* Primary — светлее для контраста на тёмном */
+  --color-primary: #3b82f6;
+  --color-primary-hover: #60a5fa;
+  --color-primary-bg: rgba(59, 130, 246, 0.15);
+  --color-primary-bg-strong: rgba(59, 130, 246, 0.25);
+  --color-on-primary: #ffffff;
+
+  /* Семантические — светлее, с полупрозрачными фонами */
+  --color-error: #ef4444;
+  --color-error-bg: rgba(239, 68, 68, 0.15);
+  --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.15);
+  --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.15);
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.15);
+
+  /* Оверлей — темнее */
+  --color-overlay: rgba(0, 0, 0, 0.7);
+
+  /* Тени — мягче на тёмном */
+  --shadow-elevated: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
+    0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-elevated-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.4),
+    0 4px 6px -4px rgba(0, 0, 0, 0.4);
+}

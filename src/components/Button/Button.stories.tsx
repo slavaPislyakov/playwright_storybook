@@ -280,7 +280,13 @@ export const IntentionalFail: Story = {
   args: {
     label: 'Сохранить',
   },
-  tags: ['intentional-fail', '!play-fn'],
+  tags: [
+    'intentional-fail',
+    '!play-fn',
+    '!stable',
+    'experimental',
+    '!autodocs',
+  ],
   parameters: {
     docs: {
       description: {

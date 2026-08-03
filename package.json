@@ -1,12 +1,12 @@
 {
   "name": "playwright_storybook",
   "version": "1.0.0",
-  "description": "",
+  "description": "Демо UI-кит на React + Vite со средой разработки и автоматизированного тестирования компонентов на базе Storybook 10 и Playwright/test-runner.",
   "type": "module",
-  "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
@@ -15,7 +15,6 @@
     "test-storybook:chromium": "test-storybook --browsers chromium --includeTags=play-fn --excludeTags=intentional-fail",
     "test-storybook:firefox": "test-storybook --browsers firefox --includeTags=play-fn --excludeTags=intentional-fail",
     "test-storybook:webkit": "test-storybook --browsers webkit --includeTags=play-fn --excludeTags=intentional-fail",
-    "test-storybook:all-browsers": "test-storybook --browsers chromium firefox webkit --includeTags=play-fn --excludeTags=intentional-fail",
     "test-storybook:demo": "test-storybook --includeTags=intentional-fail",
     "test-storybook:all": "test-storybook",
     "lint": "eslint .",
@@ -26,7 +25,7 @@
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
+    "@eslint/js": "^9.39.5",
     "@storybook/addon-a11y": "^10.4.1",
     "@storybook/addon-docs": "^10.4.1",
     "@storybook/react-vite": "^10.4.1",
@@ -34,22 +33,26 @@
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
-    "@typescript-eslint/eslint-plugin": "^8.60.0",
-    "@typescript-eslint/parser": "^8.60.0",
     "@vitejs/plugin-react": "^4.7.0",
-    "eslint": "^10.4.0",
-    "eslint-plugin-react": "^7.37.5",
+    "eslint": "^9.39.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "http-server": "^14.1.1",
     "playwright": "^1.60.0",
-    "wait-on": "^8.0.1",
     "storybook": "^10.4.1",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.60.0",
-    "vite": "^6.4.2"
+    "vite": "^6.4.2",
+    "wait-on": "^8.0.1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "storybook",
+    "playwright",
+    "react",
+    "vite",
+    "testing",
+    "ui-kit",
+    "demo"
+  ],
   "license": "ISC"
 }

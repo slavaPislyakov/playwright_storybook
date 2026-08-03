@@ -1,14 +1,15 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Modal } from './Modal';
-
-// Helper для поиска в document.body (для порталов)
-const withinBody = () => within(document.body);
+import { withinBody } from '../../test/helpers';
+import { ModalWithState } from '../../test/wrappers';
 
 const meta = {
   title: 'Components/Modal',
   component: Modal,
+  // Общий render для всех stories — обёртка с кнопкой открытия и
+  // управляемым состоянием isOpen. Ранее дублировался в каждой story.
+  render: (args) => <ModalWithState {...args} />,
   tags: ['autodocs', 'play-fn'],
   args: {
     // По умолчанию закрыто, чтобы в Docs не перекрывать интерфейс
@@ -45,28 +46,6 @@ export const Default: Story = {
   name: 'Default / open & close',
   args: {
     isOpen: false, // В Docs закрыто, в Canvas откроем через play
-  },
-  render: function Render(args) {
-    const [isOpen, setIsOpen] = useState(args.isOpen);
-    return (
-      <>
-        <button type='button' onClick={() => setIsOpen(true)}>
-          Открыть модалку
-        </button>
-        <Modal
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            setIsOpen(false);
-            args.onClose?.();
-          }}
-          onAction={(action) => {
-            setIsOpen(false);
-            args.onAction?.(action);
-          }}
-        />
-      </>
-    );
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -117,28 +96,6 @@ export const WithActions: Story = {
   args: {
     isOpen: false,
   },
-  render: function Render(args) {
-    const [isOpen, setIsOpen] = useState(args.isOpen);
-    return (
-      <>
-        <button type='button' onClick={() => setIsOpen(true)}>
-          Открыть модалку
-        </button>
-        <Modal
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            setIsOpen(false);
-            args.onClose?.();
-          }}
-          onAction={(action) => {
-            setIsOpen(false);
-            args.onAction?.(action);
-          }}
-        />
-      </>
-    );
-  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const body = withinBody();
@@ -183,28 +140,6 @@ export const CancelAction: Story = {
   args: {
     isOpen: false,
   },
-  render: function Render(args) {
-    const [isOpen, setIsOpen] = useState(args.isOpen);
-    return (
-      <>
-        <button type='button' onClick={() => setIsOpen(true)}>
-          Открыть модалку
-        </button>
-        <Modal
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            setIsOpen(false);
-            args.onClose?.();
-          }}
-          onAction={(action) => {
-            setIsOpen(false);
-            args.onAction?.(action);
-          }}
-        />
-      </>
-    );
-  },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const body = withinBody();
@@ -242,28 +177,6 @@ export const WithoutDraftButton: Story = {
     isOpen: false,
     showDraftButton: false,
   },
-  render: function Render(args) {
-    const [isOpen, setIsOpen] = useState(args.isOpen);
-    return (
-      <>
-        <button type='button' onClick={() => setIsOpen(true)}>
-          Открыть модалку
-        </button>
-        <Modal
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            setIsOpen(false);
-            args.onClose?.();
-          }}
-          onAction={(action) => {
-            setIsOpen(false);
-            args.onAction?.(action);
-          }}
-        />
-      </>
-    );
-  },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const body = withinBody();
@@ -299,28 +212,6 @@ export const BackdropClick: Story = {
   name: 'Backdrop / click to close',
   args: {
     isOpen: false,
-  },
-  render: function Render(args) {
-    const [isOpen, setIsOpen] = useState(args.isOpen);
-    return (
-      <>
-        <button type='button' onClick={() => setIsOpen(true)}>
-          Открыть модалку
-        </button>
-        <Modal
-          {...args}
-          isOpen={isOpen}
-          onClose={() => {
-            setIsOpen(false);
-            args.onClose?.();
-          }}
-          onAction={(action) => {
-            setIsOpen(false);
-            args.onAction?.(action);
-          }}
-        />
-      </>
-    );
   },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);

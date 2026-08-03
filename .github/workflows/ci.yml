@@ -21,7 +21,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Run ESLint
         run: npm run lint
@@ -44,7 +44,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
       - name: Build Storybook
         run: npm run build-storybook
@@ -56,9 +56,13 @@ jobs:
           path: storybook-static
 
   test-storybook:
-    name: Test Storybook
-    runs-on: ubuntu-latest
+    name: Test Storybook (${{ matrix.browser }})
     needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -70,10 +74,18 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+        run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ matrix.browser }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-${{ matrix.browser }}-
+
+      - name: Install Playwright browser (${{ matrix.browser }})
+        run: npx playwright install --with-deps ${{ matrix.browser }}
 
       - name: Download Storybook artifact
         uses: actions/download-artifact@v4
@@ -81,8 +93,8 @@ jobs:
           name: storybook-static
           path: storybook-static
 
-      - name: Run Storybook tests
+      - name: Run Storybook tests (${{ matrix.browser }})
         run: |
           npx http-server storybook-static --port 6006 --silent &
           npx wait-on tcp:6006
-          npm run test-storybook:play
+          npm run test-storybook:${{ matrix.browser }}

@@ -1,33 +1,6 @@
-import { useState, useCallback } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, userEvent, within, waitFor } from 'storybook/test';
-import { Toast } from './Toast';
-
-// Обёртка с внутренним состоянием для демонстрации закрытия
-const ToastWithState = (props: React.ComponentProps<typeof Toast>) => {
-  const [isVisible, setIsVisible] = useState(true);
-
-  const handleClose = useCallback(() => {
-    setIsVisible(false);
-    props.onClose?.();
-  }, [props]);
-
-  return (
-    <div className='toast-container'>
-      {isVisible && <Toast {...props} onClose={handleClose} />}
-    </div>
-  );
-};
-
-// Обёртка для позиционирования тоста в правом верхнем углу
-// (без управления состоянием)
-const ToastWithContainer = (props: React.ComponentProps<typeof Toast>) => {
-  return (
-    <div className='toast-container'>
-      <Toast {...props} />
-    </div>
-  );
-};
+import { ToastWithContainer, ToastWithState } from '../../test/wrappers';
 
 const meta = {
   title: 'Components/Toast',
@@ -73,9 +46,6 @@ export const Default: Story = {
     await expect(icon).toHaveTextContent('✓');
     await expect(message).toHaveTextContent('Операция выполнена успешно');
     await expect(closeButton).toBeInTheDocument();
-
-    // Ждем 2 секунды перед закрытием
-    await new Promise(resolve => setTimeout(resolve, 2000));
 
     // Кликаем на кнопку закрытия
     await userEvent.click(closeButton);

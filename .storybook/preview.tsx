@@ -1,6 +1,7 @@
 import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import type { Preview } from '@storybook/react';
-import React from 'react';
+import { useLayoutEffect } from 'react';
+import '../src/styles/theme.css';
 
 const customViewports = {
   desktop1920: {
@@ -71,7 +72,6 @@ const customViewports = {
 
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -84,15 +84,58 @@ const preview: Preview = {
         ...customViewports,
       },
     },
+    // Стандартный layout Storybook вместо ручного padding-декоратора.
+    // 'padded' добавляет отступы вокруг story, не искажая геометрию
+    // (важно для stories с проверками ширины, например FullWidth в Button).
+    layout: 'padded',
   },
-  // Глобальный декоратор для отступов вокруг компонента
+  // Глобальный тег статуса для всех stories (фильтрация в sidebar)
+  tags: ['stable'],
+  globalTypes: {
+    theme: {
+      description: 'Тема оформления (light/dark)',
+      toolbar: {
+        title: 'Theme',
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', icon: 'sun', title: 'Light' },
+          { value: 'dark', icon: 'moon', title: 'Dark' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    direction: {
+      description: 'Направление текста (LTR/RTL)',
+      toolbar: {
+        title: 'Direction',
+        icon: 'arrowrightalt',
+        items: [
+          { value: 'ltr', icon: 'arrowrightalt', title: 'LTR' },
+          { value: 'rtl', icon: 'arrowleftalt', title: 'RTL' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
+  initialGlobals: {
+    theme: 'light',
+    direction: 'ltr',
+  },
+  // Глобальный декоратор: применение theme/direction к корню iframe canvas
+  // (document.documentElement). Тема вешается на <html>, а не на ручную
+  // обёртку — это исключает огромный цветной фон вокруг маленьких компонентов
+  // (был minHeight: 100vh на div-обёртке) и позволяет тёмной теме закрашивать
+  // весь canvas через `body { background: var(--color-bg) }` в theme.css.
+  // Padding не нужен — используется стандартный `layout: 'padded'`.
   decorators: [
-    (Story) => {
-      return (
-        <div style={{ padding: '24px' }}>
-          <Story />
-        </div>
-      );
+    (Story, context) => {
+      const theme = context.globals?.theme ?? 'light';
+      const direction = context.globals?.direction ?? 'ltr';
+      useLayoutEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        document.documentElement.setAttribute('dir', direction);
+      }, [theme, direction]);
+      return <Story />;
     },
   ],
 };

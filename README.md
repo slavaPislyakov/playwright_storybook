@@ -38,14 +38,19 @@
 ├── .github/workflows/    # CI/CD конфигурация (GitHub Actions)
 ├── .storybook/          # Конфигурация Storybook
 ├── src/
-│   └── components/      # Библиотека компонентов
-│       ├── Button/      # Кнопка: логика, стили и stories
-│       ├── Card/        # Карточка контента
-│       ├── Checkbox/    # Чекбокс
-│       ├── Input/       # Поле ввода
-│       ├── Modal/       # Модальное окно
-│       ├── Select/      # Выпадающий список
-│       └── Toast/       # Уведомления
+│   ├── components/      # Библиотека компонентов
+│   │   ├── Button/      # Кнопка: логика, стили и stories
+│   │   ├── Card/        # Карточка контента
+│   │   ├── Checkbox/    # Чекбокс
+│   │   ├── Input/       # Поле ввода
+│   │   ├── Modal/       # Модальное окно
+│   │   ├── Select/      # Выпадающий список
+│   │   └── Toast/       # Уведомления
+│   ├── styles/         # Дизайн-токены (theme.css)
+│   ├── App.tsx          # Витрина компонентов (demo-приложение)
+│   ├── App.css          # Стили витрины
+│   └── main.tsx         # Точка входа demo-приложения
+├── index.html           # HTML-точка входа Vite
 ├── vite.config.ts       # Конфигурация сборки (Vite + React)
 ├── tsconfig.json        # Настройки типизации TypeScript
 └── package.json         # Скрипты запуска и зависимости
@@ -56,7 +61,8 @@
 ### Разработка и визуализация
 
 - `npm run storybook` — Запускает локальную среду Storybook (порт 6006). Основное место разработки компонентов.
-- `npm run dev` — Запуск Vite сервера для основного приложения.
+- `npm run dev` — Запуск Vite-сервера для demo-приложения (витрина компонентов).
+- `npm run preview` — Локальный просмотр собранной demo-страницы из `dist/`.
 
 ### Качество кода
 
@@ -77,7 +83,6 @@
 | `npm run test-storybook:chromium` | Интерактивные тесты в Chromium | `play-fn` |
 | `npm run test-storybook:firefox` | Интерактивные тесты в Firefox | `play-fn` |
 | `npm run test-storybook:webkit` | Интерактивные тесты в WebKit | `play-fn` |
-| `npm run test-storybook:all-browsers` | Кроссбраузерная проверка | `play-fn` |
 
 Теги:
 
@@ -88,8 +93,18 @@
 
 ### Сборка
 
-- `npm run build` — Сборка основного проекта.
+- `npm run build` — Сборка demo-приложения (витрины компонентов) в `dist/`: проверка типов (`tsc --noEmit`) + `vite build`.
 - `npm run build-storybook` — Генерация статического билда Storybook.
+
+### Demo-приложение (витрина компонентов)
+
+Помимо Storybook, в проекте есть отдельное Vite-приложение-витрина (`index.html` + `src/main.tsx` + `src/App.tsx`), которое показывает все компоненты UI-кита на одной странице с переключателем тем (light/dark).
+
+- `npm run dev` — запуск в режиме разработки.
+- `npm run build` — production-сборка в `dist/`.
+- `npm run preview` — просмотр собранной версии.
+
+Тема сохраняется в `localStorage` и учитывает системные настройки (`prefers-color-scheme`).
 
 ## Тестирование в Storybook
 
@@ -123,9 +138,11 @@ Pipeline запускается при каждом `push` в `main`/`master` и
 └──────────┬──────────┘
            │
            ▼
-┌─────────────────────┐
-│ test-storybook      │  ← npm run test-storybook:play
-└─────────────────────┘
+┌─────────────────────────────────────────────────────┐
+│ test-storybook (matrix: chromium, firefox, webkit)  │
+│   ← npx test-storybook --browsers <browser>          │
+│      --includeTags=play-fn --excludeTags=intentional-fail │
+└─────────────────────────────────────────────────────┘
 ```
 
 ### Что проверяется
@@ -134,11 +151,26 @@ Pipeline запускается при каждом `push` в `main`/`master` и
 | :--- | :--- | :--- |
 | **lint-and-typecheck** | `npm run lint` `npm run type-check` | Проверка стиля кода и типизации |
 | **build-storybook** | `npm run build-storybook` | Проверка что Storybook собирается без ошибок |
-| **test-storybook** | `npm run test-storybook:play` | Запуск интерактивных тестов на статическом билде |
+| **test-storybook (chromium)** | `npx test-storybook --browsers chromium` | Интерактивные тесты в Chromium |
+| **test-storybook (firefox)** | `npx test-storybook --browsers firefox` | Интерактивные тесты в Firefox |
+| **test-storybook (webkit)** | `npx test-storybook --browsers webkit` | Интерактивные тесты в WebKit |
 
 Конфигурация: `.github/workflows/ci.yml`
 
 ## Дизайн-система
+
+### Темы оформления (light/dark)
+
+Проект поддерживает две темы через CSS-переменные в `src/styles/theme.css`:
+
+- **Light** (по умолчанию) — на `:root`
+- **Dark** — переопределяется через `[data-theme='dark']`
+
+Глобальный декоратор `preview.tsx` вешает `data-theme` на контейнер-обёртку каждой story из значения `globals.theme`. Переключатель **Theme** (☀️/🌙) в тулбаре Storybook меняет тему для всех компонентов.
+
+Дизайн-токены: `--color-bg`, `--color-bg-muted`, `--color-bg-subtle`, `--color-border`, `--color-border-strong`, `--color-text`, `--color-text-secondary`, `--color-text-muted`, `--color-primary`, `--color-primary-hover`, `--color-primary-bg`, `--color-primary-bg-strong`, `--color-on-primary`, `--color-error`(+`-bg`), `--color-success`(+`-bg`), `--color-warning`(+`-bg`), `--color-info`(+`-bg`), `--color-overlay`, `--shadow-elevated`(+`-hover`).
+
+Все CSS-файлы компонентов используют `var(--color-*)` вместо хардкод-цветов — добавление новой темы сводится к переопределению переменных.
 
 ### Viewport пресеты
 
@@ -157,4 +189,4 @@ Storybook настроен с пресетами для тестирования
 
 ## TODO
 
-- [ ] Рассмотреть миграцию с Storybook Test Runner на Vitest addon — см. `docs/VITEST_MIGRATION_PLAN.md`
+- [ ] Рассмотреть миграцию с Storybook Test Runner на Vitest addon — см. `docs/FRAMEWORK_IMPROVEMENTS.md` (п.1 «Что добавить»)

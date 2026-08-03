@@ -1,34 +1,7 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Input } from './Input';
-
-// Обёртка с управляемым состоянием для интерактивных сторей
-const InputWithState = (props: {
-  label: string;
-  placeholder?: string;
-  required?: boolean;
-  maxLength?: number;
-  disabled?: boolean;
-  error?: string;
-  onChange?: (value: string) => void;
-  onBlur?: () => void;
-}) => {
-  const [value, setValue] = useState('');
-
-  const handleChange = (newValue: string) => {
-    setValue(newValue);
-    props.onChange?.(newValue);
-  };
-
-  return (
-    <Input
-      {...props}
-      value={value}
-      onChange={handleChange}
-    />
-  );
-};
+import { InputWithState } from '../../test/wrappers';
 
 const meta = {
   title: 'Components/Input',
@@ -188,7 +161,13 @@ export const IntentionalFail: Story = {
     value: 'QA',
     maxLength: 20,
   },
-  tags: ['intentional-fail', '!play-fn'],
+  tags: [
+    'intentional-fail',
+    '!play-fn',
+    '!stable',
+    'experimental',
+    '!autodocs',
+  ],
   parameters: {
     docs: {
       description: {

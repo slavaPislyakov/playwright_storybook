@@ -9,11 +9,11 @@
   margin-bottom: 8px;
   font-size: 14px;
   font-weight: 500;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .select-field__required {
-  color: #dc2626;
+  color: var(--color-error);
   margin-left: 4px;
 }
 
@@ -22,8 +22,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  background: #ffffff;
-  border: 2px solid #e2e8f0;
+  background: var(--color-bg);
+  border: 2px solid var(--color-bg-subtle);
   border-radius: 8px;
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -31,15 +31,16 @@
 }
 
 .select:hover:not(.select--disabled) {
-  border-color: #cbd5e1;
+  border-color: var(--color-border);
 }
 
 .select:focus-visible {
   outline: none;
+  border-color: var(--color-primary);
 }
 
 .select--open {
-  border-color: #2563eb;
+  border-color: var(--color-primary);
 }
 
 .select--open .select__arrow {
@@ -47,13 +48,13 @@
 }
 
 .select--disabled {
-  background: #f1f5f9;
+  background: var(--color-bg-muted);
   cursor: not-allowed;
   opacity: 0.7;
 }
 
 .select--error {
-  border-color: #dc2626;
+  border-color: var(--color-error);
 }
 
 .select--error:focus-visible {
@@ -62,16 +63,16 @@
 
 .select__value {
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text);
 }
 
 .select__value--placeholder {
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 
 .select__arrow {
   font-size: 12px;
-  color: #64748b;
+  color: var(--color-text-muted);
   transition: transform 0.2s ease;
   margin-left: 8px;
 }
@@ -81,8 +82,8 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #ffffff;
-  border: 2px solid #e2e8f0;
+  background: var(--color-bg);
+  border: 2px solid var(--color-bg-subtle);
   border-radius: 8px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   list-style: none;
@@ -96,7 +97,7 @@
 .select__option {
   padding: 10px 12px;
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text);
   cursor: pointer;
   border-radius: 4px;
   transition: background-color 0.15s ease;
@@ -104,12 +105,12 @@
 
 .select__option:hover,
 .select__option--highlighted {
-  background-color: #f1f5f9;
+  background-color: var(--color-bg-muted);
 }
 
 .select__option--selected {
-  background-color: #dbeafe;
-  color: #1d4ed8;
+  background-color: var(--color-primary-bg-strong);
+  color: var(--color-primary-hover);
   font-weight: 500;
 }
 
@@ -117,5 +118,5 @@
   display: block;
   margin-top: 6px;
   font-size: 12px;
-  color: #dc2626;
+  color: var(--color-error);
 }

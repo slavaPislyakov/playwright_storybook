@@ -1,35 +1,7 @@
-import { useState, useCallback } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Select } from './Select';
-
-// Обёртка с управлением состоянием ошибки - очищает ошибку при выборе
-type SelectWithErrorStateProps = Omit<
-  React.ComponentProps<typeof Select>,
-  'error' | 'value'
->;
-
-const INITIAL_ERROR = 'Пожалуйста, выберите категорию';
-
-const SelectWithErrorState = (props: SelectWithErrorStateProps) => {
-  const [error, setError] = useState<string | undefined>(INITIAL_ERROR);
-  const [value, setValue] = useState<string>('');
-
-  const handleChange = useCallback((newValue: string) => {
-    setValue(newValue);
-    setError(undefined); // Очищаем ошибку при выборе
-    props.onChange?.(newValue);
-  }, [props]);
-
-  return (
-    <Select
-      {...props}
-      value={value}
-      error={error}
-      onChange={handleChange}
-    />
-  );
-};
+import { SelectWithErrorState } from '../../test/wrappers';
 
 const meta = {
   title: 'Components/Select',

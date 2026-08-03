@@ -1,31 +1,7 @@
-import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
 import { Checkbox } from './Checkbox';
-
-// Обёртка с управляемым состоянием для интерактивных сторей
-const CheckboxWithState = (props: {
-  label: string;
-  defaultChecked?: boolean;
-  disabled?: boolean;
-  indeterminate?: boolean;
-  onChange?: (checked: boolean) => void;
-}) => {
-  const [checked, setChecked] = useState(props.defaultChecked ?? false);
-
-  const handleChange = (newChecked: boolean) => {
-    setChecked(newChecked);
-    props.onChange?.(newChecked);
-  };
-
-  return (
-    <Checkbox
-      {...props}
-      checked={checked}
-      onChange={handleChange}
-    />
-  );
-};
+import { CheckboxWithState } from '../../test/wrappers';
 
 const meta = {
   title: 'Components/Checkbox',
