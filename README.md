@@ -1,6 +1,6 @@
 # Playwright & Storybook UI Kit
 
-Проект представляет собой изолированную среду для разработки и автоматизированного тестирования UI-компонентов на стеке **React + Vite + Storybook + Playwright**.
+Проект представляет собой изолированную среду для разработки и автоматизированного тестирования UI-компонентов на стеке **React + Vite + Storybook + Vitest addon (Playwright browser mode)**.
 
 ## Содержание
 
@@ -10,7 +10,6 @@
 - [Тестирование в Storybook](#тестирование-в-storybook)
 - [CI/CD](#cicd)
 - [Дизайн-система](#дизайн-система)
-- [TODO](#todo)
 
 ## Быстрый старт
 
@@ -70,26 +69,28 @@
 - `npm run lint:fix` — Автоисправление ESLint.
 - `npm run type-check` — Проверка TypeScript без генерации файлов.
 
-### Тестирование (Playwright + Storybook Runner)
+### Тестирование (Vitest addon + Playwright browser mode)
 
-Тесты запускаются на основе историй (stories) из Storybook.
+Тесты запускаются на основе историй (stories) из Storybook через `@storybook/addon-vitest`. Vitest addon сам поднимает Storybook (через `storybookScript` из `vitest.config.ts`) и прогоняет stories в Playwright browser mode — отдельный build Storybook, `http-server` и `wait-on` не нужны.
 
-| Команда | Описание | Теги |
+| Команда | Описание | Теги / браузеры |
 | :--- | :--- | :--- |
-| `npm run test-storybook` | Все тесты, кроме демо-ошибок | Все, кроме `intentional-fail` |
-| `npm run test-storybook:play` | Интерактивные тесты с `play` функцией | `play-fn` |
-| `npm run test-storybook:all` | Все тесты, включая демо-ошибки | Все |
-| `npm run test-storybook:demo` | Только демо-ошибки (ожидаемо падают) | `intentional-fail` |
-| `npm run test-storybook:chromium` | Интерактивные тесты в Chromium | `play-fn` |
-| `npm run test-storybook:firefox` | Интерактивные тесты в Firefox | `play-fn` |
-| `npm run test-storybook:webkit` | Интерактивные тесты в WebKit | `play-fn` |
+| `npm run test-storybook` | Один прогон всех тестов, кроме демо-ошибок | `test`, исключая `intentional-fail`; chromium, firefox, webkit |
+| `npm run test-storybook:watch` | Watch-режим: перезапуск тестов при изменении файлов | `test`, исключая `intentional-fail` |
+| `npm run test-storybook:chromium` | Один прогон только в Chromium | `STORYBOOK_TEST_BROWSERS=chromium` |
+| `npm run test-storybook:firefox` | Один прогон только в Firefox | `STORYBOOK_TEST_BROWSERS=firefox` |
+| `npm run test-storybook:webkit` | Один прогон только в WebKit | `STORYBOOK_TEST_BROWSERS=webkit` |
+| `npm run test-storybook:demo` | Только демо-ошибки (ожидаемо падают) | `STORYBOOK_TEST_DEMO=1` → `intentional-fail` |
+| `npm run test-storybook:coverage` | Тесты + coverage-отчёт (V8, Chromium) | `--coverage`, отчёт в `coverage/index.html` |
 
 Теги:
 
-- `play-fn` — интерактивные тесты с `play` функцией
-- `!play-fn` — тесты без интерактивных сценариев (только рендеринг)
-- `intentional-fail` — намеренно падающие тесты
+- `test` — стандартный тег Storybook 10, наследуется всеми stories автоматически
+- `!test` — явное исключение story из тестов (для stories без play-функции)
+- `intentional-fail` — намеренно падающие тесты (демонстрация)
 - `autodocs` — автоматическая документация в Storybook
+
+Фильтрация тегов настраивается в `vitest.config.ts` (опция `tags` плагина `storybookTest`).
 
 ### Сборка
 
@@ -108,11 +109,11 @@
 
 ## Тестирование в Storybook
 
-Проект использует **Storybook Test Runner** на базе **Playwright**. Все тестовые сценарии описаны непосредственно в файлах `*.stories.tsx` через:
+Проект использует **`@storybook/addon-vitest`** (Vitest + Playwright browser mode). Все тестовые сценарии описаны непосредственно в файлах `*.stories.tsx` через:
 
 - **JSDoc комментарии** — описание что проверяется в каждой story
 - **Play function** — интерактивные сценарии (клики, ввод, проверки)
-- **Accessibility checks** — проверки доступности через `@storybook/addon-a11y`
+- **Accessibility checks** — автоматические проверки axe-core через `@storybook/addon-a11y` (запускаются в `afterEach` после каждой story; `parameters.a11y.test='error'` в `preview.tsx` делает нарушения упавшими в CI). Настройка: `context: 'body'`, дефолты axe-core.
 
 Откройте Storybook (`npm run storybook`) и перейдите в **Docs** или **Canvas** режим для просмотра:
 
@@ -140,8 +141,9 @@ Pipeline запускается при каждом `push` в `main`/`master` и
            ▼
 ┌─────────────────────────────────────────────────────┐
 │ test-storybook (matrix: chromium, firefox, webkit)  │
-│   ← npx test-storybook --browsers <browser>          │
-│      --includeTags=play-fn --excludeTags=intentional-fail │
+│   ← npm run test-storybook:<browser>                │
+│      Vitest addon сам поднимает Storybook через      │
+│      storybookScript (http-server/wait-on не нужны) │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -151,9 +153,9 @@ Pipeline запускается при каждом `push` в `main`/`master` и
 | :--- | :--- | :--- |
 | **lint-and-typecheck** | `npm run lint` `npm run type-check` | Проверка стиля кода и типизации |
 | **build-storybook** | `npm run build-storybook` | Проверка что Storybook собирается без ошибок |
-| **test-storybook (chromium)** | `npx test-storybook --browsers chromium` | Интерактивные тесты в Chromium |
-| **test-storybook (firefox)** | `npx test-storybook --browsers firefox` | Интерактивные тесты в Firefox |
-| **test-storybook (webkit)** | `npx test-storybook --browsers webkit` | Интерактивные тесты в WebKit |
+| **test-storybook (chromium)** | `npm run test-storybook:chromium` | Компонентные тесты в Chromium (Vitest + Playwright) |
+| **test-storybook (firefox)** | `npm run test-storybook:firefox` | Компонентные тесты в Firefox (Vitest + Playwright) |
+| **test-storybook (webkit)** | `npm run test-storybook:webkit` | Компонентные тесты в WebKit (Vitest + Playwright) |
 
 Конфигурация: `.github/workflows/ci.yml`
 
@@ -186,7 +188,3 @@ Storybook настроен с пресетами для тестирования
 | Mobile 375 | 375x812 | Mobile |
 | iPhone 13 Pro | 390x844 | Mobile |
 | Mobile 320 | 320x568 | Mobile |
-
-## TODO
-
-- [ ] Рассмотреть миграцию с Storybook Test Runner на Vitest addon — см. `docs/FRAMEWORK_IMPROVEMENTS.md` (п.1 «Что добавить»)

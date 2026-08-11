@@ -5,16 +5,13 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  // Глобальные ignore-паттерны
   {
     ignores: ['dist', 'storybook-static', 'node_modules'],
   },
 
-  // Базовые пресеты
   js.configs.recommended,
   ...tseslint.configs.recommended,
 
-  // React-плагины (hooks + refresh)
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {
@@ -30,7 +27,6 @@ export default tseslint.config(
     },
   },
 
-  // Стилистические правила (вынесены отдельно для читаемости)
   {
     files: ['**/*.{ts,tsx}'],
     plugins: {

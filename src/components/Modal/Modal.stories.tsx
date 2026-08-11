@@ -1,18 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Modal } from './Modal';
 import { withinBody } from '../../test/helpers';
 import { ModalWithState } from '../../test/wrappers';
+import { Modal } from './Modal';
 
 const meta = {
   title: 'Components/Modal',
   component: Modal,
-  // Общий render для всех stories — обёртка с кнопкой открытия и
-  // управляемым состоянием isOpen. Ранее дублировался в каждой story.
   render: (args) => <ModalWithState {...args} />,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
-    // По умолчанию закрыто, чтобы в Docs не перекрывать интерфейс
     isOpen: false,
     title: 'Опубликовать статью',
     description:
@@ -51,7 +48,6 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     const body = withinBody();
 
-    // Открываем модалку через кнопку
     const openButton = canvas.getByRole('button', { name: 'Открыть модалку' });
     await userEvent.click(openButton);
 
@@ -62,7 +58,6 @@ export const Default: Story = {
     const draftButton = body.getByTestId('modal-draft');
     const publishButton = body.getByTestId('modal-publish');
 
-    // Проверяем что модалка открыта и все элементы есть
     await expect(dialog).toBeInTheDocument();
     await expect(dialog).toHaveAttribute('aria-modal', 'true');
     await expect(title).toBeInTheDocument();
@@ -71,10 +66,8 @@ export const Default: Story = {
     await expect(draftButton).toHaveTextContent('Сохранить как черновик');
     await expect(publishButton).toHaveTextContent('Опубликовать');
 
-    // Закрываем модалку по кнопке X
     await userEvent.click(closeButton);
 
-    // После закрытия модалки их DOM пропадает - это нормально
     await expect(body.queryByRole('dialog')).not.toBeInTheDocument();
     await expect(args.onClose).toHaveBeenCalled();
   },
@@ -100,23 +93,18 @@ export const WithActions: Story = {
     const canvas = within(canvasElement);
     const body = withinBody();
 
-    // Открываем модалку через кнопку
     let openButton = canvas.getByRole('button', { name: 'Открыть модалку' });
     await userEvent.click(openButton);
 
-    // Тестируем кнопку Публикации
     const publishButton = body.getByTestId('modal-publish');
     await userEvent.click(publishButton);
     await expect(args.onAction).toHaveBeenCalledWith('publish');
 
-    // Сбрасываем мок для следующей проверки
-    args.onAction?.mockClear();
+    args.onAction?.mockClear?.();
 
-    // Открываем модалку заново
     openButton = canvas.getByRole('button', { name: 'Открыть модалку' });
     await userEvent.click(openButton);
 
-    // Тестируем кнопку Черновика
     const draftButton = body.getByTestId('modal-draft');
     await expect(draftButton).toBeInTheDocument();
     await userEvent.click(draftButton);
@@ -144,19 +132,15 @@ export const CancelAction: Story = {
     const canvas = within(canvasElement);
     const body = withinBody();
 
-    // Открываем модалку через кнопку
     const openButton = canvas.getByRole('button', { name: 'Открыть модалку' });
     await userEvent.click(openButton);
 
     const cancelButton = body.getByTestId('modal-cancel');
 
-    // Кликаем отмену
     await userEvent.click(cancelButton);
 
-    // Проверяем что callback вызван
     await expect(args.onAction).toHaveBeenCalledWith('cancel');
 
-    // Проверяем что модалка закрылась
     await expect(body.queryByRole('dialog')).not.toBeInTheDocument();
   },
 };
@@ -181,7 +165,6 @@ export const WithoutDraftButton: Story = {
     const canvas = within(canvasElement);
     const body = withinBody();
 
-    // Открываем модалку через кнопку
     const openButton = canvas.getByRole('button', { name: 'Открыть модалку' });
     await userEvent.click(openButton);
 
@@ -217,7 +200,6 @@ export const BackdropClick: Story = {
     const canvas = within(canvasElement);
     const body = withinBody();
 
-    // Открываем модалку через кнопку
     const openButton = canvas.getByRole('button', { name: 'Открыть модалку' });
     await userEvent.click(openButton);
 

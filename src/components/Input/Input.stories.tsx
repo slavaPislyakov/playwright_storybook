@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Input } from './Input';
 import { InputWithState } from '../../test/wrappers';
+import { Input } from './Input';
 
 const meta = {
   title: 'Components/Input',
   component: Input,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
     label: 'Название статьи',
     placeholder: 'Введите название',
@@ -43,16 +43,13 @@ export const Default: Story = {
     const input = canvas.getByRole('textbox', { name: 'Название статьи' });
     const counter = canvas.getByTestId('input-counter');
 
-    // Проверяем начальное состояние
     await expect(input).toBeInTheDocument();
     await expect(input).toHaveAttribute('placeholder', 'Введите название');
     await expect(input).toHaveValue('');
     await expect(counter).toHaveTextContent('0/50');
 
-    // Вводим текст - теперь это работает благодаря обёртке с useState
     await userEvent.type(input, 'Storybook');
 
-    // Проверяем что текст введён
     await expect(input).toHaveValue('Storybook');
     await expect(counter).toHaveTextContent('9/50');
     await expect(args.onChange).toHaveBeenCalled();
@@ -163,7 +160,7 @@ export const IntentionalFail: Story = {
   },
   tags: [
     'intentional-fail',
-    '!play-fn',
+    '!test',
     '!stable',
     'experimental',
     '!autodocs',

@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { expect, userEvent, within, waitFor } from 'storybook/test';
+import { expect, userEvent, waitFor, within } from 'storybook/test';
 import { ToastWithContainer, ToastWithState } from '../../test/wrappers';
 
 const meta = {
   title: 'Components/Toast',
   component: ToastWithContainer,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
     message: 'Операция выполнена успешно',
     variant: 'success',
@@ -47,13 +47,10 @@ export const Default: Story = {
     await expect(message).toHaveTextContent('Операция выполнена успешно');
     await expect(closeButton).toBeInTheDocument();
 
-    // Кликаем на кнопку закрытия
     await userEvent.click(closeButton);
 
-    // Проверяем что появился класс анимации выхода
     await expect(toast).toHaveClass('toast--exiting');
 
-    // Ждем окончания анимации и проверяем что тост исчез
     await waitFor(() => {
       expect(canvas.queryByTestId('toast')).not.toBeInTheDocument();
     }, { timeout: 500 });
@@ -186,7 +183,6 @@ export const AutoClose: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
 
-    // Проверяем что progress bar есть и настроен
     const progress = canvas.getByTestId('toast-progress');
     await expect(progress).toBeInTheDocument();
     await expect(progress).toHaveAttribute(
@@ -194,7 +190,6 @@ export const AutoClose: Story = {
       expect.stringContaining('animation-duration: 1500ms'),
     );
 
-    // Ждем окончания таймера + анимацию выхода + небольшой запас
     await waitFor(() => {
       expect(canvas.queryByTestId('toast')).not.toBeInTheDocument();
     }, { timeout: 2500 });

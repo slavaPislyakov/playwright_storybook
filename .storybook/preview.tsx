@@ -1,6 +1,8 @@
-import { INITIAL_VIEWPORTS } from 'storybook/viewport';
+/// <reference types="vite/client" />
+
 import type { Preview } from '@storybook/react';
 import { useLayoutEffect } from 'react';
+import { INITIAL_VIEWPORTS } from 'storybook/viewport';
 import '../src/styles/theme.css';
 
 const customViewports = {
@@ -84,12 +86,14 @@ const preview: Preview = {
         ...customViewports,
       },
     },
-    // Стандартный layout Storybook вместо ручного padding-декоратора.
-    // 'padded' добавляет отступы вокруг story, не искажая геометрию
-    // (важно для stories с проверками ширины, например FullWidth в Button).
     layout: 'padded',
+    a11y: {
+      test: 'error',
+      context: 'body',
+      config: {},
+      options: {},
+    },
   },
-  // Глобальный тег статуса для всех stories (фильтрация в sidebar)
   tags: ['stable'],
   globalTypes: {
     theme: {
@@ -121,12 +125,6 @@ const preview: Preview = {
     theme: 'light',
     direction: 'ltr',
   },
-  // Глобальный декоратор: применение theme/direction к корню iframe canvas
-  // (document.documentElement). Тема вешается на <html>, а не на ручную
-  // обёртку — это исключает огромный цветной фон вокруг маленьких компонентов
-  // (был minHeight: 100vh на div-обёртке) и позволяет тёмной теме закрашивать
-  // весь canvas через `body { background: var(--color-bg) }` в theme.css.
-  // Padding не нужен — используется стандартный `layout: 'padded'`.
   decorators: [
     (Story, context) => {
       const theme = context.globals?.theme ?? 'light';

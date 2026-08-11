@@ -5,7 +5,7 @@ import { Card } from './Card';
 const meta = {
   title: 'Components/Card',
   component: Card,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
     title: 'Заголовок карточки',
     description: 'Описание содержимого карточки. Здесь может быть любой текст.',
@@ -91,8 +91,6 @@ export const WithFooter: Story = {
     title: 'Действие',
     description: 'Нажмите для выполнения',
     footer: <button type='button'>Подробнее</button>,
-    // Убираем onClick, чтобы кнопка в футере не была вложена
-    // в кликабельную карточку
     onClick: undefined,
   },
   play: async ({ canvasElement }) => {

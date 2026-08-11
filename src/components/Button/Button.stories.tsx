@@ -5,7 +5,7 @@ import { Button } from './Button';
 const meta = {
   title: 'Components/Button',
   component: Button,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
     label: 'Сохранить',
     variant: 'primary',
@@ -174,9 +174,8 @@ export const FullWidth: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button', { name: 'Продолжить' });
-
-    // Проверяем что кнопка растянута почти на всю ширину контейнера
     const buttonRect = button.getBoundingClientRect();
+
     await expect(buttonRect.width).toBeGreaterThan(270);
     await expect(buttonRect.width).toBeLessThanOrEqual(320);
   },
@@ -282,7 +281,7 @@ export const IntentionalFail: Story = {
   },
   tags: [
     'intentional-fail',
-    '!play-fn',
+    '!test',
     '!stable',
     'experimental',
     '!autodocs',
@@ -310,11 +309,12 @@ export const IntentionalFail: Story = {
  * ⚠️ **ЭТА STORY БЕЗ PLAY ФУНКЦИИ**
  *
  * Эта story только рендерит кнопку без интерактивных тестов.
- * Используется для демонстрации разницы между:
- * - `npm run test-storybook` (запустит эту story)
- * - `npm run test-storybook:play` (пропустит эту story)
+ * Используется для демонстрации того, что story без play-функции
+ * исключается из тестов через тег `!test` (стандартный тег Storybook 10,
+ * наследуется всеми stories автоматически; `!test` снимает его).
  *
- * Тег `play-fn` убран — эта story не будет запущена при фильтрации по play-fn.
+ * - `npm run test-storybook` — пропустит (тег `!test`)
+ * - `npm run test-storybook:demo` — пропустит (нет `intentional-fail`)
  */
 export const StaticOnly: Story = {
   name: 'Static / render only (no play)',
@@ -322,8 +322,5 @@ export const StaticOnly: Story = {
     label: 'Просто кнопка',
     variant: 'primary',
   },
-  // Явно исключаем 'play-fn' через префикс !
-  // Теперь эта story НЕ будет запущена при --includeTags=play-fn
-  tags: ['!play-fn', 'autodocs'],
-  // Нет play функции — только рендеринг
+  tags: ['!test', 'autodocs'],
 };

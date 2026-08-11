@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Checkbox } from './Checkbox';
 import { CheckboxWithState } from '../../test/wrappers';
+import { Checkbox } from './Checkbox';
 
 const meta = {
   title: 'Components/Checkbox',
   component: Checkbox,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
     label: 'Принять условия',
     onChange: fn(),
@@ -37,27 +37,21 @@ export const Default: Story = {
     const checkboxControl = canvas.getByTestId('checkbox-control');
     const checkboxText = canvas.getByTestId('checkbox-text');
 
-    // Проверяем начальное состояние
     await expect(checkboxInput).toBeInTheDocument();
     await expect(checkboxInput).not.toBeChecked();
     await expect(checkboxControl).not.toHaveClass('checkbox__control--checked');
     await expect(checkboxText).toHaveTextContent('Принять условия');
 
-    // Кликаем для включения
     await userEvent.click(checkboxInput);
 
-    // Проверяем что состояние изменилось
     await expect(checkboxInput).toBeChecked();
     await expect(checkboxControl).toHaveClass('checkbox__control--checked');
     await expect(args.onChange).toHaveBeenCalledWith(true);
 
-    // Сбрасываем мок для следующей проверки
-    args.onChange?.mockClear();
+    args.onChange?.mockClear?.();
 
-    // Кликаем для выключения
     await userEvent.click(checkboxInput);
 
-    // Проверяем что состояние снова изменилось
     await expect(checkboxInput).not.toBeChecked();
     await expect(checkboxControl).not.toHaveClass('checkbox__control--checked');
     await expect(args.onChange).toHaveBeenCalledWith(false);
@@ -83,14 +77,11 @@ export const Checked: Story = {
     const checkboxInput = canvas.getByTestId('checkbox-input');
     const checkboxControl = canvas.getByTestId('checkbox-control');
 
-    // Проверяем начальное состояние checked
     await expect(checkboxInput).toBeChecked();
     await expect(checkboxControl).toHaveClass('checkbox__control--checked');
 
-    // Кликаем для снятия отметки
     await userEvent.click(checkboxInput);
 
-    // Проверяем что состояние изменилось
     await expect(checkboxInput).not.toBeChecked();
     await expect(checkboxControl).not.toHaveClass('checkbox__control--checked');
     await expect(args.onChange).toHaveBeenCalledWith(false);
@@ -177,27 +168,17 @@ export const Keyboard: Story = {
 
     const checkboxInput = canvas.getByTestId('checkbox-input');
 
-    // Устанавливаем фокус на чекбокс
     await checkboxInput.focus();
     await expect(checkboxInput).toHaveFocus();
-
-    // Проверяем начальное состояние
     await expect(checkboxInput).not.toBeChecked();
 
-    // Нажимаем пробел для переключения
     await userEvent.keyboard(' ');
-
-    // Проверяем что состояние изменилось
     await expect(checkboxInput).toBeChecked();
     await expect(args.onChange).toHaveBeenCalledWith(true);
 
-    // Сбрасываем мок
     args.onChange?.mockClear();
 
-    // Нажимаем пробел снова для обратного переключения
     await userEvent.keyboard(' ');
-
-    // Проверяем что состояние снова изменилось
     await expect(checkboxInput).not.toBeChecked();
     await expect(args.onChange).toHaveBeenCalledWith(false);
   },

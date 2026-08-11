@@ -1,12 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { expect, fn, userEvent, within } from 'storybook/test';
-import { Select } from './Select';
 import { SelectWithErrorState } from '../../test/wrappers';
+import { Select } from './Select';
 
 const meta = {
   title: 'Components/Select',
   component: Select,
-  tags: ['autodocs', 'play-fn'],
+  tags: ['autodocs'],
   args: {
     label: 'Выберите категорию',
     options: [
@@ -84,23 +84,18 @@ export const KeyboardNavigation: Story = {
 
     const selectTrigger = canvas.getByTestId('select-trigger');
 
-    // Фокусируем селект через Tab
     await selectTrigger.focus();
     await expect(selectTrigger).toHaveFocus();
 
-    // Первый ArrowDown открывает dropdown и выделяет первую опцию
     await userEvent.keyboard('{ArrowDown}');
 
     const dropdown = canvas.getByTestId('select-dropdown');
     await expect(dropdown).toBeInTheDocument();
 
-    // Второй ArrowDown перемещает на вторую опцию
     await userEvent.keyboard('{ArrowDown}');
 
-    // Enter выбирает выделенную опцию (вторая опция = 'design')
     await userEvent.keyboard('{Enter}');
 
-    // Проверяем что выбрана вторая опция
     await expect(selectTrigger).toHaveTextContent('Дизайн');
     await expect(args.onChange).toHaveBeenCalledWith('design');
   },
@@ -195,14 +190,11 @@ export const Preselected: Story = {
     const selectTrigger = canvas.getByTestId('select-trigger');
     await expect(selectTrigger).toHaveTextContent('Дизайн');
 
-    // Проверяем что dropdown изначально закрыт
     await expect(canvas.queryByTestId('select-dropdown'))
       .not.toBeInTheDocument();
 
-    // Открываем dropdown
     await userEvent.click(selectTrigger);
 
-    // Проверяем что dropdown открылся и выбранная опция подсвечена
     const selectedOption = canvas.getByTestId('select-option-design');
     await expect(selectedOption).toBeInTheDocument();
     await expect(selectedOption).toHaveAttribute('aria-selected', 'true');
@@ -232,24 +224,19 @@ export const ErrorClearOnSelect: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
 
-    // Проверяем что ошибка отображается изначально
     const errorMessage = canvas.getByTestId('select-error');
     await expect(errorMessage)
       .toHaveTextContent('Пожалуйста, выберите категорию');
 
-    // Открываем селект
     const selectTrigger = canvas.getByTestId('select-trigger');
     await userEvent.click(selectTrigger);
 
-    // Выбираем опцию
     const techOption = canvas.getByTestId('select-option-tech');
     await userEvent.click(techOption);
 
-    // Проверяем что выбор произошел
     await expect(selectTrigger).toHaveTextContent('Технологии');
     await expect(args.onChange).toHaveBeenCalledWith('tech');
 
-    // Проверяем что ошибка исчезла
     await expect(canvas.queryByTestId('select-error')).not.toBeInTheDocument();
   },
 };

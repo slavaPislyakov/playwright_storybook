@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './toast.css';
 
 export type ToastVariant = 'info' | 'success' | 'warning' | 'error';
@@ -29,7 +29,6 @@ export function Toast({
 
   const handleClose = useCallback(() => {
     setIsExiting(true);
-    // Даем время на анимацию перед вызовом onClose
     setTimeout(() => {
       onClose?.();
     }, 300);
